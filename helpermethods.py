@@ -49,7 +49,7 @@ def findLogo(image):
     matches = None
     good = []
     goodlen = 0
-    j = 0
+    j = None
     for i in range(0, len(kp1s)):
         matches_itr = flann.knnMatch(des1s[i], des2, k=2)
         # store all the good matches as per Lowe's ratio test.
@@ -78,6 +78,7 @@ def findLogo(image):
             dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
 
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+            print("M:",M)
             matchesMask = mask.ravel().tolist()
 
             # h, w = img1.shape
@@ -95,6 +96,7 @@ def findLogo(image):
                 M_topLeft = M[0:2:1, 0:2:1]
                 M_topLeft_det = np.linalg.det(M_topLeft)
                 dst = cv2.perspectiveTransform(pts, M)
+                print (dst)
                 # Calculate relative gap between the longest and shortest sides
                 (longest_side, shortest_side) = calculateMaxAndMinDistance(dst)
                 relative_gap = (longest_side - shortest_side) / longest_side
@@ -115,9 +117,11 @@ def findLogo(image):
                 #                    (0, 300), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
                 # else:
                 #     print("Not Drawing")
+            else:
+                return image, None
         else:
             print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
-            matchesMask = None
+            j = None
     print("Time:", time.time() - start_time)
     # font = cv2.FONT_HERSHEY_SIMPLEX
     # img2 = cv2.putText(img2, str(len(good)), (0, 300), font, 1, (0, 255, 255), 2, cv2.LINE_AA)

@@ -10,13 +10,16 @@ from helpermethods import *
 # filename = "mandiri_camera.jpg"
 # filename = "bca_statement.png"
 # filename = "bca_camera.jpg"
-filenames = ["hsbc_camera.jpg","mandiri_camera.jpg","bca_camera.jpg"]
+# filenames = ["hsbc_camera.jpg", "mandiri_camera.jpg", "bca_camera.jpg"]
+# filenames = ["bca_statement2.png"]
+filenames = ["Screenshot.png"]
+# filenames = ["fifa-14.png"]
 for filename in filenames:
     pic = cv2.imread(filename)
 
     # img = cv2.imread(filename, 0)
-    ratio = pic.shape[0]/pic.shape[1]
-    pic = cv2.resize(pic,(1280,int(1280*ratio)),interpolation = cv2.INTER_CUBIC)
+    ratio = pic.shape[0] / pic.shape[1]
+    pic = cv2.resize(pic, (1280, int(1280 * ratio)), interpolation=cv2.INTER_CUBIC)
     img_x, index = findLogo(pic)
     bankName = index_to_name(index)
     print(bankName)
@@ -25,4 +28,3 @@ for filename in filenames:
     # plt.imshow(img_x, 'img_x'),plt.show()
     cv2.waitKeyEx()
     cv2.destroyAllWindows()
-
